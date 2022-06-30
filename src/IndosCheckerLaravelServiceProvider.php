@@ -2,9 +2,9 @@
 
 namespace RenderbitTechnologies\IndosCheckerLaravel;
 
+use RenderbitTechnologies\IndosCheckerLaravel\Commands\IndosCheckerLaravelCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use RenderbitTechnologies\IndosCheckerLaravel\Commands\IndosCheckerLaravelCommand;
 
 class IndosCheckerLaravelServiceProvider extends PackageServiceProvider
 {
