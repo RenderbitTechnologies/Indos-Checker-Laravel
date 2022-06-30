@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace RenderbitTechnologies\IndosCheckerLaravel\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class IndosCheckerLaravelCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'indos-checker-laravel';
 
     public $description = 'My command';
 
