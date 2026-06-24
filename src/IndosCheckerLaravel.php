@@ -3,7 +3,6 @@
 namespace RenderbitTechnologies\IndosCheckerLaravel;
 
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Http;
 use RenderbitTechnologies\IndosCheckerLaravel\Exceptions\DgShippingVerificationException;
 use RenderbitTechnologies\IndosCheckerLaravel\Exceptions\InvalidIndosException;
 use RenderbitTechnologies\IndosCheckerLaravel\Services\DgShippingVerifier;
