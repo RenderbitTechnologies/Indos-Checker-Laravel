@@ -13,7 +13,7 @@ Only the latest release receives security fixes.
 
 **Do not open a public GitHub issue for security vulnerabilities.**
 
-Email **soham@renderbit.com** with the subject line `[SECURITY] Indos-Checker-Laravel — <brief description>`. Please include:
+Email **contact@renderbit.com** with the subject line `[SECURITY] Indos-Checker-Laravel — <brief description>`. Please include:
 
 - A description of the vulnerability and its potential impact
 - The affected version(s)
