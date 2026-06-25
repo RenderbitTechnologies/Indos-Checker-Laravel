@@ -4,49 +4,9 @@ All notable changes to `Indos-Checker-Laravel` will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-
 ---
 
-## v1.0.0 - 2026-06-25
-
-### What's Changed
-
-* Bump dependabot/fetch-metadata from 1.3.1 to 1.3.3 by @dependabot[bot] in https://github.com/RenderbitTechnologies/Indos-Checker-Laravel/pull/1
-* Bump dependabot/fetch-metadata from 1.3.3 to 1.3.4 by @dependabot[bot] in https://github.com/RenderbitTechnologies/Indos-Checker-Laravel/pull/2
-* Bump dependabot/fetch-metadata from 1.3.4 to 1.3.5 by @dependabot[bot] in https://github.com/RenderbitTechnologies/Indos-Checker-Laravel/pull/3
-* Bump ramsey/composer-install from 1 to 2 by @dependabot[bot] in https://github.com/RenderbitTechnologies/Indos-Checker-Laravel/pull/4
-* Bump dependabot/fetch-metadata from 1.3.5 to 1.3.6 by @dependabot[bot] in https://github.com/RenderbitTechnologies/Indos-Checker-Laravel/pull/5
-* Bump dependabot/fetch-metadata from 1.3.6 to 1.4.0 by @dependabot[bot] in https://github.com/RenderbitTechnologies/Indos-Checker-Laravel/pull/6
-* Bump dependabot/fetch-metadata from 1.4.0 to 1.5.1 by @dependabot[bot] in https://github.com/RenderbitTechnologies/Indos-Checker-Laravel/pull/7
-* Bump dependabot/fetch-metadata from 1.5.1 to 1.6.0 by @dependabot[bot] in https://github.com/RenderbitTechnologies/Indos-Checker-Laravel/pull/8
-* Bump actions/checkout from 3 to 4 by @dependabot[bot] in https://github.com/RenderbitTechnologies/Indos-Checker-Laravel/pull/9
-* Bump stefanzweifel/git-auto-commit-action from 4 to 5 by @dependabot[bot] in https://github.com/RenderbitTechnologies/Indos-Checker-Laravel/pull/10
-* Bump ramsey/composer-install from 2 to 3 by @dependabot[bot] in https://github.com/RenderbitTechnologies/Indos-Checker-Laravel/pull/11
-* Bump dependabot/fetch-metadata from 1.6.0 to 2.0.0 by @dependabot[bot] in https://github.com/RenderbitTechnologies/Indos-Checker-Laravel/pull/12
-* Bump dependabot/fetch-metadata from 2.0.0 to 2.1.0 by @dependabot[bot] in https://github.com/RenderbitTechnologies/Indos-Checker-Laravel/pull/13
-* Bump dependabot/fetch-metadata from 2.1.0 to 2.2.0 by @dependabot[bot] in https://github.com/RenderbitTechnologies/Indos-Checker-Laravel/pull/14
-* Bump dependabot/fetch-metadata from 2.2.0 to 2.3.0 by @dependabot[bot] in https://github.com/RenderbitTechnologies/Indos-Checker-Laravel/pull/15
-* Bump dependabot/fetch-metadata from 2.3.0 to 2.4.0 by @dependabot[bot] in https://github.com/RenderbitTechnologies/Indos-Checker-Laravel/pull/16
-* Bump stefanzweifel/git-auto-commit-action from 5 to 6 by @dependabot[bot] in https://github.com/RenderbitTechnologies/Indos-Checker-Laravel/pull/17
-* Bump actions/checkout from 4 to 5 by @dependabot[bot] in https://github.com/RenderbitTechnologies/Indos-Checker-Laravel/pull/18
-* Bump stefanzweifel/git-auto-commit-action from 6 to 7 by @dependabot[bot] in https://github.com/RenderbitTechnologies/Indos-Checker-Laravel/pull/19
-* Bump actions/checkout from 5 to 6 by @dependabot[bot] in https://github.com/RenderbitTechnologies/Indos-Checker-Laravel/pull/20
-* Bump dependabot/fetch-metadata from 2.4.0 to 2.5.0 by @dependabot[bot] in https://github.com/RenderbitTechnologies/Indos-Checker-Laravel/pull/21
-* Bump ramsey/composer-install from 3 to 4 by @dependabot[bot] in https://github.com/RenderbitTechnologies/Indos-Checker-Laravel/pull/22
-* Bump dependabot/fetch-metadata from 2.5.0 to 3.0.0 by @dependabot[bot] in https://github.com/RenderbitTechnologies/Indos-Checker-Laravel/pull/23
-* Bump dependabot/fetch-metadata from 3.0.0 to 3.1.0 by @dependabot[bot] in https://github.com/RenderbitTechnologies/Indos-Checker-Laravel/pull/24
-* Bump actions/checkout from 6 to 7 by @dependabot[bot] in https://github.com/RenderbitTechnologies/Indos-Checker-Laravel/pull/25
-* Implement INDOS number validation and DG Shipping verification by @soham2008xyz in https://github.com/RenderbitTechnologies/Indos-Checker-Laravel/pull/26
-
-### New Contributors
-
-* @dependabot[bot] made their first contribution in https://github.com/RenderbitTechnologies/Indos-Checker-Laravel/pull/1
-* @soham2008xyz made their first contribution in https://github.com/RenderbitTechnologies/Indos-Checker-Laravel/pull/26
-
-**Full Changelog**: https://github.com/RenderbitTechnologies/Indos-Checker-Laravel/commits/v1.0.0
-
 ## [Unreleased]
-
 
 ---
 
