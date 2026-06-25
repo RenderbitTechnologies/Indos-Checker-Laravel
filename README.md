@@ -227,7 +227,7 @@ Please see [CHANGELOG](CHANGELOG.md) for recent changes.
 
 ## Contributing
 
-Please see [CONTRIBUTING](https://github.com/RenderbitTechnologies/.github/blob/main/CONTRIBUTING.md) for details.
+Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 ## Security Vulnerabilities
 
