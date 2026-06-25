@@ -14,7 +14,7 @@ body:
     id: package_version
     attributes:
       label: Package version
-      description: Output of `composer show renderbittechnologies/indos-checker-laravel | grep versions`
+      description: Output of `composer show renderbit-technologies/indos-checker-laravel | grep versions`
       placeholder: "e.g. 1.0.0"
     validations:
       required: true

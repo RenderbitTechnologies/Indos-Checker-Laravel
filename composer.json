@@ -1,12 +1,12 @@
 {
-    "name": "renderbittechnologies/indos-checker-laravel",
+    "name": "renderbit-technologies/indos-checker-laravel",
     "description": "A Laravel package to check for the validity of INDOS numbers as issued by the Directorate General of Shipping, Mumbai, India",
     "keywords": [
         "RenderbitTechnologies",
         "laravel",
         "indos-checker-laravel"
     ],
-    "homepage": "https://github.com/renderbittechnologies/indos-checker-laravel",
+    "homepage": "https://github.com/RenderbitTechnologies/Indos-Checker-Laravel",
     "license": "MIT",
     "authors": [
         {
