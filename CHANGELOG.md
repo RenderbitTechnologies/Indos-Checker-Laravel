@@ -10,6 +10,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [1.1.0] - 2026-06-25
+
+### Changed
+
+- Package renamed from `renderbittechnologies/indos-checker-laravel` to `renderbit-technologies/indos-checker-laravel` on Packagist
+- `composer.json` homepage corrected to match GitHub org casing (`RenderbitTechnologies/Indos-Checker-Laravel`)
+
+### Added
+
+- `CONTRIBUTING.md` with setup, test commands, CS Fixer, conventional commit guide, PR checklist, and bug/security reporting instructions
+- `SECURITY.md` with supported versions table, private disclosure address (`contact@renderbit.com`), 48h/7-day SLA, in-scope and out-of-scope definitions
+- GitHub issue templates: structured `bug_report.yml` and `verification_issue.yml` forms with required-field validation
+- GitHub pull request template with type-of-change checkboxes, testing checklist, and CHANGELOG reminder
+- Dependabot `composer` ecosystem tracking with grouped updates for `illuminate/*`, `phpstan/*`, and `pestphp/*`
+
+---
+
 ## [1.0.0] - 2026-06-25
 
 ### Added
