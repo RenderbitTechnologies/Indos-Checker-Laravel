@@ -6,14 +6,20 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up()
+    public function up(): void
     {
-        Schema::create('indos_checker_laravel_table', function (Blueprint $table) {
+        Schema::create(config('indos-checker-laravel.table', 'indos_checker_laravel_table'), function (Blueprint $table) {
             $table->id();
-
-            // add fields
-
+            $table->string('indos_number', 20)->unique()->index();
+            $table->boolean('is_valid')->default(false);
+            $table->timestamp('verified_at')->nullable();
+            $table->text('raw_response')->nullable();
             $table->timestamps();
         });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists(config('indos-checker-laravel.table', 'indos_checker_laravel_table'));
     }
 };
