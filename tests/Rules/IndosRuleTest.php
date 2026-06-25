@@ -5,7 +5,7 @@ use RenderbitTechnologies\IndosCheckerLaravel\Rules\IndosRule;
 
 it('passes validation for valid INDOS number', function () {
     $validator = Validator::make(
-        ['indos' => 'IND1234567'],
+        ['indos' => '18NM1234'],
         ['indos' => [new IndosRule()]]
     );
 
@@ -19,7 +19,7 @@ it('fails validation for invalid INDOS number', function () {
     );
 
     expect($validator->fails())->toBeTrue();
-    expect($validator->errors()->first('indos'))->toContain('INDOS');
+    expect($validator->errors()->first('indos'))->toContain('INDoS');
 });
 
 it('fails validation for empty string', function () {
@@ -33,7 +33,7 @@ it('fails validation for empty string', function () {
 
 it('fails validation for non-string value', function () {
     $validator = Validator::make(
-        ['indos' => 1234567],
+        ['indos' => 18121234],
         ['indos' => [new IndosRule()]]
     );
 
@@ -42,16 +42,16 @@ it('fails validation for non-string value', function () {
 
 it('fails validation for INDOS number with wrong length', function () {
     $validator = Validator::make(
-        ['indos' => 'IND12345'],
+        ['indos' => '18NM123'],
         ['indos' => [new IndosRule()]]
     );
 
     expect($validator->fails())->toBeTrue();
 });
 
-it('passes validation for lowercase IND prefix', function () {
+it('passes validation for lowercase port code', function () {
     $validator = Validator::make(
-        ['indos' => 'ind1234567'],
+        ['indos' => '18nm1234'],
         ['indos' => [new IndosRule()]]
     );
 

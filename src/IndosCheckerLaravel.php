@@ -18,7 +18,7 @@ class IndosCheckerLaravel
 
     public function __construct()
     {
-        $this->format = config('indos-checker-laravel.format', '/^IND\d{7}$/');
+        $this->format = config('indos-checker-laravel.format', '/^\d{2}[A-Z]{2}\d{4}$/i');
         $this->dgShippingUrl = config('indos-checker-laravel.dg_shipping_url');
         $this->timeout = config('indos-checker-laravel.timeout', 30);
         $this->cacheVerification = config('indos-checker-laravel.cache_verification', true);
@@ -35,13 +35,7 @@ class IndosCheckerLaravel
         $errors = [];
 
         if ($indosNumber === '') {
-            $errors[] = 'The INDOS number is required.';
-
-            return $errors;
-        }
-
-        if (! is_string($indosNumber)) {
-            $errors[] = 'The INDOS number must be a string.';
+            $errors[] = trans('indos-checker-laravel::validation.required');
 
             return $errors;
         }
@@ -49,28 +43,13 @@ class IndosCheckerLaravel
         $indosNumber = trim($indosNumber);
 
         if ($indosNumber === '') {
-            $errors[] = 'The INDOS number cannot be blank.';
+            $errors[] = trans('indos-checker-laravel::validation.blank');
 
             return $errors;
         }
 
-        if (strlen($indosNumber) !== 10) {
-            $errors[] = 'The INDOS number must be exactly 10 characters (IND + 7 digits).';
-        }
-
-        if (! preg_match('/^IND/i', $indosNumber)) {
-            $errors[] = 'The INDOS number must start with "IND".';
-        }
-
-        if (strtoupper(substr($indosNumber, 0, 3)) === 'IND') {
-            $digits = substr($indosNumber, 3);
-            if (! ctype_digit($digits)) {
-                $errors[] = 'The INDOS number must have 7 digits after "IND".';
-            }
-        }
-
-        if (empty($errors) && ! preg_match($this->format, $indosNumber)) {
-            $errors[] = 'The INDOS number format is invalid.';
+        if (! preg_match($this->format, $indosNumber)) {
+            $errors[] = trans('indos-checker-laravel::validation.invalid_format');
         }
 
         return $errors;

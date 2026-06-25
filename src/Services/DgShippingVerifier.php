@@ -94,7 +94,6 @@ class DgShippingVerifier
             'date of birth',
             'indos no',
             'certificate',
-            'valid',
         ];
 
         foreach ($successPatterns as $pattern) {
@@ -103,7 +102,12 @@ class DgShippingVerifier
             }
         }
 
-        // If no clear indicators, check if the INDOS number appears in the response
-        return str_contains($body, $indosNumber);
+        // 'valid' must be checked separately to avoid matching 'invalid'
+        if (str_contains($bodyLower, 'valid') && ! str_contains($bodyLower, 'invalid')) {
+            return true;
+        }
+
+        // Case-insensitive fallback: check if the INDOS number appears in the response
+        return str_contains($bodyLower, strtolower($indosNumber));
     }
 }

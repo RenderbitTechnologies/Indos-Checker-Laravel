@@ -19,6 +19,7 @@ class IndosCheckerLaravelServiceProvider extends PackageServiceProvider
             ->name('indos-checker-laravel')
             ->hasConfigFile()
             ->hasViews()
+            ->hasTranslations()
             ->hasMigration('create_indos_checker_laravel_table')
             ->hasCommand(IndosCheckerLaravelCommand::class);
     }

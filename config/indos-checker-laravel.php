@@ -9,11 +9,11 @@ return [
     |--------------------------------------------------------------------------
     |
     | The regex pattern used to validate INDOS numbers.
-    | Default format: IND followed by 7 digits (e.g., IND1234567).
+    | DGMA format: 2-digit year + 2-letter port code + 4-digit serial (e.g., 18NM1234).
     |
     */
 
-    'format' => '/^IND\d{7}$/i',
+    'format' => '/^\d{2}[A-Z]{2}\d{4}$/i',
 
     /*
     |--------------------------------------------------------------------------

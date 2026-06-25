@@ -6,41 +6,41 @@ use RenderbitTechnologies\IndosCheckerLaravel\IndosCheckerLaravel as IndosChecke
 it('validates a correct INDOS number', function () {
     $checker = new IndosChecker();
 
-    expect($checker->isValid('IND1234567'))->toBeTrue();
-    expect($checker->isValid('IND0000000'))->toBeTrue();
-    expect($checker->isValid('IND9999999'))->toBeTrue();
+    expect($checker->isValid('18NM1234'))->toBeTrue();
+    expect($checker->isValid('00AA0000'))->toBeTrue();
+    expect($checker->isValid('99ZZ9999'))->toBeTrue();
 });
 
 it('rejects INDOS number with wrong length', function () {
     $checker = new IndosChecker();
 
-    expect($checker->isValid('IND123456'))->toBeFalse();
-    expect($checker->isValid('IND12345678'))->toBeFalse();
-    expect($checker->isValid('IND1234'))->toBeFalse();
+    expect($checker->isValid('18NM123'))->toBeFalse();
+    expect($checker->isValid('18NM12345'))->toBeFalse();
+    expect($checker->isValid('18NM1'))->toBeFalse();
 });
 
-it('rejects INDOS number without IND prefix', function () {
+it('rejects INDOS number with wrong format', function () {
     $checker = new IndosChecker();
 
-    expect($checker->isValid('ABC1234567'))->toBeFalse();
-    expect($checker->isValid('1234567890'))->toBeFalse();
-    expect($checker->isValid('XD1234567'))->toBeFalse();
+    expect($checker->isValid('ABCD1234'))->toBeFalse();
+    expect($checker->isValid('12345678'))->toBeFalse();
+    expect($checker->isValid('18121234'))->toBeFalse();
 });
 
-it('rejects INDOS number with non-digit characters after prefix', function () {
+it('rejects INDOS number with non-digit characters in serial', function () {
     $checker = new IndosChecker();
 
-    expect($checker->isValid('IND123456A'))->toBeFalse();
-    expect($checker->isValid('IND12345AB'))->toBeFalse();
-    expect($checker->isValid('INDABCDEFGHI'))->toBeFalse();
+    expect($checker->isValid('18NM12AB'))->toBeFalse();
+    expect($checker->isValid('18NM1-34'))->toBeFalse();
+    expect($checker->isValid('18NM1 34'))->toBeFalse();
+    expect($checker->isValid('18NM12!4'))->toBeFalse();
 });
 
-it('accepts lowercase IND prefix and normalizes', function () {
+it('accepts lowercase port code and normalizes', function () {
     $checker = new IndosChecker();
 
-    // The regex is case-insensitive, so ind1234567 should match format
-    expect($checker->isValid('ind1234567'))->toBeTrue();
-    expect($checker->isValid('Ind1234567'))->toBeTrue();
+    expect($checker->isValid('18nm1234'))->toBeTrue();
+    expect($checker->isValid('18Nm1234'))->toBeTrue();
 });
 
 it('rejects empty and blank strings', function () {
@@ -56,13 +56,13 @@ it('returns validation errors', function () {
     $errors = $checker->validate('BAD');
     expect($errors)->toBeArray();
     expect($errors)->not->toBeEmpty();
-    expect($errors)->toContain('The INDOS number must be exactly 10 characters (IND + 7 digits).');
+    expect($errors)->toContain('The INDoS number format is invalid. Expected format: YYCCSSSS (e.g., 18NM1234).');
 });
 
 it('returns empty errors for valid INDOS number', function () {
     $checker = new IndosChecker();
 
-    $errors = $checker->validate('IND1234567');
+    $errors = $checker->validate('18NM1234');
     expect($errors)->toBeArray();
     expect($errors)->toBeEmpty();
 });
@@ -70,29 +70,29 @@ it('returns empty errors for valid INDOS number', function () {
 it('normalizes INDOS number format', function () {
     $checker = new IndosChecker();
 
-    expect($checker->format('ind1234567'))->toBe('IND1234567');
-    expect($checker->format('  IND1234567  '))->toBe('IND1234567');
-    expect($checker->format('Ind1234567'))->toBe('IND1234567');
+    expect($checker->format('18nm1234'))->toBe('18NM1234');
+    expect($checker->format('  18NM1234  '))->toBe('18NM1234');
+    expect($checker->format('18Nm1234'))->toBe('18NM1234');
 });
 
 it('works through the facade', function () {
-    expect(IndosCheckerLaravel::isValid('IND1234567'))->toBeTrue();
+    expect(IndosCheckerLaravel::isValid('18NM1234'))->toBeTrue();
     expect(IndosCheckerLaravel::isValid('INVALID'))->toBeFalse();
 });
 
-it('validates INDOS numbers with various digit combinations', function () {
+it('validates INDOS numbers with various port code combinations', function () {
     $checker = new IndosChecker();
 
     $validNumbers = [
-        'IND1000000',
-        'IND2000000',
-        'IND3000000',
-        'IND4000000',
-        'IND5000000',
-        'IND6000000',
-        'IND7000000',
-        'IND8000000',
-        'IND9000000',
+        '10NM1000',
+        '11GL2000',
+        '12MH3000',
+        '13KL4000',
+        '14TN5000',
+        '15AP6000',
+        '16WB7000',
+        '17GJ8000',
+        '18OR9000',
     ];
 
     foreach ($validNumbers as $number) {
@@ -103,8 +103,8 @@ it('validates INDOS numbers with various digit combinations', function () {
 it('rejects INDOS numbers with special characters', function () {
     $checker = new IndosChecker();
 
-    expect($checker->isValid('IND123-4567'))->toBeFalse();
-    expect($checker->isValid('IND123 4567'))->toBeFalse();
-    expect($checker->isValid('IND1234!67'))->toBeFalse();
-    expect($checker->isValid('IND123456@'))->toBeFalse();
+    expect($checker->isValid('18NM-234'))->toBeFalse();
+    expect($checker->isValid('18NM 234'))->toBeFalse();
+    expect($checker->isValid('18NM!234'))->toBeFalse();
+    expect($checker->isValid('18NM1234@'))->toBeFalse();
 });

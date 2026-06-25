@@ -18,7 +18,7 @@ class IndosRule implements ValidationRule
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         if (! is_string($value)) {
-            $fail('The :attribute must be a valid INDOS number.');
+            $fail(trans('indos-checker-laravel::validation.must_be_string', ['attribute' => $attribute]));
 
             return;
         }
