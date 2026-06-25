@@ -1,0 +1,112 @@
+name: Bug Report
+description: Something is broken or behaving incorrectly
+labels: ["bug"]
+body:
+
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug report. Please fill in as much detail as possible — incomplete reports are hard to action.
+
+        **Security vulnerability?** Do not open a public issue. Email **contact@renderbit.com** instead — see [SECURITY.md](https://github.com/RenderbitTechnologies/Indos-Checker-Laravel/blob/main/SECURITY.md).
+
+  - type: input
+    id: package_version
+    attributes:
+      label: Package version
+      description: Output of `composer show renderbittechnologies/indos-checker-laravel | grep versions`
+      placeholder: "e.g. 1.0.0"
+    validations:
+      required: true
+
+  - type: input
+    id: laravel_version
+    attributes:
+      label: Laravel version
+      description: Output of `php artisan --version`
+      placeholder: "e.g. Laravel Framework 11.9.0"
+    validations:
+      required: true
+
+  - type: input
+    id: php_version
+    attributes:
+      label: PHP version
+      description: Output of `php --version`
+      placeholder: "e.g. PHP 8.3.4"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: bug_area
+    attributes:
+      label: Area
+      description: Which part of the package does this affect?
+      options:
+        - "Format validation (isValid / validate / format)"
+        - "Laravel validation rule (IndosRule)"
+        - "Remote verification (verify / DgShippingVerifier)"
+        - "Caching"
+        - "Exception handling"
+        - "Configuration / service provider"
+        - "Other"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: A clear description of the bug.
+      placeholder: "When I call verify('18NM1234'), I expect … but instead …"
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Minimal code snippet or sequence of steps that reliably triggers the bug.
+      render: php
+      placeholder: |
+        $checker = new \RenderbitTechnologies\IndosCheckerLaravel\IndosCheckerLaravel();
+        $result = $checker->verify('18NM1234');
+        // shows unexpected result
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+      placeholder: "The method should return …"
+    validations:
+      required: true
+
+  - type: textarea
+    id: config
+    attributes:
+      label: Relevant config values
+      description: Paste the contents of your published `config/indos-checker-laravel.php` (redact any sensitive values).
+      render: php
+    validations:
+      required: false
+
+  - type: textarea
+    id: exception
+    attributes:
+      label: Exception / stack trace
+      description: If an exception was thrown, paste the full message and stack trace here.
+      render: shell
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I have searched existing issues and this is not a duplicate
+          required: true
+        - label: I am using a supported version of the package (1.x)
+          required: true

@@ -1,0 +1,95 @@
+name: Verification Issue
+description: The DG Shipping remote verification is returning an unexpected result for a specific INDOS number
+labels: ["bug", "verification"]
+body:
+
+  - type: markdown
+    attributes:
+      value: |
+        Use this template when `verify()` returns an incorrect `valid` result (false positive or false negative) for a real INDOS number.
+
+        **Note:** The DG Shipping portal is geo-restricted to Indian IP ranges. If you are running the package from outside India, remote verification will time out — this is expected behaviour and not a bug in the package.
+
+        **Do not include real seafarer PII** (full name, date of birth, certificate numbers) in this report. The INDOS number alone is sufficient to reproduce the issue.
+
+  - type: input
+    id: package_version
+    attributes:
+      label: Package version
+      placeholder: "e.g. 1.0.0"
+    validations:
+      required: true
+
+  - type: input
+    id: php_version
+    attributes:
+      label: PHP version
+      placeholder: "e.g. PHP 8.3.4"
+    validations:
+      required: true
+
+  - type: input
+    id: indos_number
+    attributes:
+      label: INDOS number
+      description: The number being verified. Do not include any other seafarer details.
+      placeholder: "e.g. 18NM1234"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: result_type
+    attributes:
+      label: Incorrect result type
+      options:
+        - "False positive — verify() returned valid: true but the number is not registered"
+        - "False negative — verify() returned valid: false but the number is registered"
+        - "Exception thrown unexpectedly"
+        - "Other"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What did `verify()` return, and what did you expect?
+      placeholder: |
+        $result = $checker->verify('18NM1234');
+        // returned: ['valid' => false, ...]
+        // expected: valid: true — the number is registered on the DG Shipping portal
+    validations:
+      required: true
+
+  - type: textarea
+    id: raw_response
+    attributes:
+      label: Raw portal response (if available)
+      description: |
+        The `raw_response` key in the `verify()` return value contains the HTML from the DG Shipping portal.
+        Paste a relevant excerpt here (strip any PII first).
+      render: html
+    validations:
+      required: false
+
+  - type: textarea
+    id: exception
+    attributes:
+      label: Exception / stack trace
+      render: shell
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I verified the result manually on the DG Shipping portal (https://www.dgshipping.gov.in)
+          required: true
+        - label: I am running the package from an Indian IP range (or confirmed connectivity to the portal)
+          required: true
+        - label: I have not included any personal seafarer data (name, DOB, certificate number) in this report
+          required: true
+        - label: I have searched existing issues and this is not a duplicate
+          required: true
