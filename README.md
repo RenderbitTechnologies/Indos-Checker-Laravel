@@ -1,7 +1,7 @@
 # INDOS Checker for Laravel
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/renderbit-technologies/indos-checker-laravel.svg?style=flat-square)](https://packagist.org/packages/renderbit-technologies/indos-checker-laravel)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/renderbit-technologies/indos-checker-laravel/run-tests.yml?branch=main&label=tests)](https://github.com/renderbit-technologies/indos-checker-laravel/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/RenderbitTechnologies/indos-checker-laravel/run-tests.yml?branch=main&label=tests)](https://github.com/RenderbitTechnologies/indos-checker-laravel/actions?query=workflow%3Arun-tests+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/renderbit-technologies/indos-checker-laravel.svg?style=flat-square)](https://packagist.org/packages/renderbit-technologies/indos-checker-laravel)
 
 A Laravel package for validating **INDoS (Indian National Database of Seafarers) numbers** as issued by the Directorate General of Shipping (DG Shipping), Mumbai, India.
