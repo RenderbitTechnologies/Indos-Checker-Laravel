@@ -67,12 +67,15 @@ class DgShippingVerifier
 
     /**
      * Parse the DG Shipping portal response to determine validity.
+     *
+     * Uses a fail-closed approach: only explicit success patterns return true.
+     * Unknown or ambiguous response formats are treated as invalid.
      */
     protected function parseResponse(string $body, string $indosNumber): bool
     {
         $bodyLower = strtolower($body);
 
-        // Check for common error indicators
+        // Explicit error indicators — fail fast
         $errorPatterns = [
             'no record found',
             'invalid indos',
@@ -88,7 +91,7 @@ class DgShippingVerifier
             }
         }
 
-        // Check for success indicators
+        // Explicit success indicators — only trust well-known DG Shipping fields
         $successPatterns = [
             'seafarer name',
             'date of birth',
@@ -102,12 +105,9 @@ class DgShippingVerifier
             }
         }
 
-        // 'valid' must be checked separately to avoid matching 'invalid'
-        if (str_contains($bodyLower, 'valid') && ! str_contains($bodyLower, 'invalid')) {
-            return true;
-        }
-
-        // Case-insensitive fallback: check if the INDOS number appears in the response
-        return str_contains($bodyLower, strtolower($indosNumber));
+        // Fail closed: an unrecognised response cannot be trusted as valid.
+        // The INDOS number echoed back in an error page would otherwise be a
+        // false positive, so we do not fall back to an INDOS-in-body check.
+        return false;
     }
 }

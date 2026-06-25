@@ -108,7 +108,7 @@ class IndosCheckerLaravel
         $result = $verifier->verify($indosNumber);
 
         if ($this->cacheVerification) {
-            Cache::put($cacheKey, $result, $this->cacheTtl * 60);
+            Cache::put($cacheKey, array_diff_key($result, ['raw_response' => null]), $this->cacheTtl * 60);
         }
 
         return $result;
