@@ -35,6 +35,7 @@ Closes #
 
 ## Checklist
 
+- [ ] PR labelled (used for auto-generated release notes — pick one: `enhancement`, `bug`, `refactor`, `performance`, `security`, `breaking-change`, `deprecated`, `removed`, `test`, `documentation`, `ci`)
 - [ ] `CHANGELOG.md` updated under `[Unreleased]`
 - [ ] No secrets, credentials, or PII included
-- [ ] Breaking change? If yes, describe the migration path below
+- [ ] Breaking change? If yes, describe the migration path below and add the `breaking-change` label

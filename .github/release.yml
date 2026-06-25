@@ -1,0 +1,61 @@
+# GitHub release notes configuration.
+# Controls how auto-generated release notes are structured when a tag is pushed.
+# Categories map PR labels to Keep a Changelog sections.
+# https://docs.github.com/en/repositories/releasing-projects-on-github/automatically-generated-release-notes
+
+changelog:
+  exclude:
+    # Dependabot PRs are grouped under CI / Dependencies below,
+    # but exclude the bot author from the New Contributors section.
+    authors:
+      - dependabot[bot]
+  categories:
+
+    - title: "⚠️ Breaking Changes"
+      labels:
+        - breaking-change
+
+    - title: "### Security"
+      labels:
+        - security
+
+    - title: "### Added"
+      labels:
+        - enhancement
+        - feature
+
+    - title: "### Fixed"
+      labels:
+        - bug
+        - verification
+
+    - title: "### Changed"
+      labels:
+        - refactor
+        - performance
+
+    - title: "### Deprecated"
+      labels:
+        - deprecated
+
+    - title: "### Removed"
+      labels:
+        - removed
+
+    - title: "### Tests"
+      labels:
+        - test
+
+    - title: "### Documentation"
+      labels:
+        - documentation
+
+    - title: "### CI / Dependencies"
+      labels:
+        - ci
+        - dependencies
+
+    # Catch-all: any merged PR not matched above
+    - title: "### Other"
+      labels:
+        - "*"
