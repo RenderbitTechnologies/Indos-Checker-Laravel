@@ -16,16 +16,12 @@ The package provides:
 - **Laravel validation rule** — drop-in `IndosRule` for use in `Validator`/`FormRequest`
 - **Result caching** — configurable cache layer to avoid repeated HTTP requests
 
----
-
 ## Requirements
 
 | Laravel | PHP     |
 |---------|---------|
 | 10.x    | ≥ 8.2   |
 | 11.x    | ≥ 8.2   |
-
----
 
 ## Installation
 
@@ -45,8 +41,6 @@ Optionally publish and run the database migration (stores verification records):
 php artisan vendor:publish --tag="indos-checker-laravel-migrations"
 php artisan migrate
 ```
-
----
 
 ## Configuration
 
@@ -77,8 +71,6 @@ return [
 ```
 
 > **Note:** The DG Shipping portal is hosted on Indian government infrastructure and is only reachable from Indian IP ranges. Remote verification requires an Indian network or a Mumbai-region cloud instance.
-
----
 
 ## Usage
 
@@ -192,8 +184,6 @@ config(['indos-checker-laravel.dg_shipping_url' => null]);
 
 Calling `verify()` with a null URL throws `DgShippingVerificationException` immediately with the message `"DG Shipping verification is not configured"`.
 
----
-
 ## INDOS Number Format
 
 | Segment | Length | Description                        | Example |
@@ -203,8 +193,6 @@ Calling `verify()` with a null URL throws `DgShippingVerificationException` imme
 | SSSS    | 4 digits | Serial number                     | `1234`  |
 
 Full example: **`18NM1234`** — registered in 2018 at New Mangalore port, serial 1234.
-
----
 
 ## Testing
 
@@ -221,8 +209,6 @@ INDOS_ONLINE_TEST=1 vendor/bin/pest --group=online
 ```
 
 Run these from an Indian network, a Mumbai-region CI runner, or over an Indian VPN.
-
----
 
 ## Changelog
 
