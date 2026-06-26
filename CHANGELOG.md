@@ -12,6 +12,39 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [2.0.0] - 2026-06-26
+
+### Breaking Changes
+
+- `verify(string $indosNumber)` now requires a second argument: `verify(string $indosNumber, string $dob)` where `$dob` is the seafarer's date of birth in `DD/MM/YYYY` format.
+- Return value of `verify()` no longer contains `raw_response`. It now contains `seafarer: array` with structured data (`Name`, `Date of Birth`, `Passport No.`, `CDC No.`, etc.).
+- Config key `dg_shipping_url` replaced by `esamudra_url`. Update your published config or `.env` with `INDOS_ESAMUDRA_URL=http://220.156.189.33/esamudraUI/checkerajaxservlet`.
+- `verify()` now caches **only** successful (`valid: true`) results. Previously, all results (including invalid) were cached.
+- `php artisan indos:check --verify` now requires `--dob=DD/MM/YYYY`.
+
+### Changed
+
+- Replaced `DgShippingVerifier` (keyword HTML matching against the DG Shipping HTML portal) with `IndosApiService` (Symfony DomCrawler against the DGS eSamudra AJAX server).
+- Online verification now targets `http://220.156.189.33/esamudraUI/checkerajaxservlet` instead of the DG Shipping HTML portal.
+- Successful verifications return a rich seafarer profile via `getData()` (name, DOB, passport, CDC details).
+- Single HTTP request per verification instead of two (`getData()` replaces `checkValid()` + `getData()`).
+
+### Added
+
+- `renderbit-technologies/indos-checker-api ^2.1` Composer dependency.
+- `src/Services/IndosApiService.php` — thin wrapper around `IndosChecker`.
+- `esamudra_url` config key (overridable via `INDOS_ESAMUDRA_URL` env var).
+- `--dob` option on `php artisan indos:check --verify` command.
+- Artisan command now displays full seafarer profile on successful verification.
+
+### Removed
+
+- `src/Services/DgShippingVerifier.php` — replaced by `IndosApiService`.
+- Config key `dg_shipping_url`.
+
+
+---
+
 ## [1.1.0] - 2026-06-25
 
 ### Changed
