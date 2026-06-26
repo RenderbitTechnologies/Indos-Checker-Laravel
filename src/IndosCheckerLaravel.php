@@ -2,27 +2,29 @@
 
 namespace RenderbitTechnologies\IndosCheckerLaravel;
 
+use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Cache;
+use RenderbitTechnologies\IndosCheckerApi\IndosChecker;
 use RenderbitTechnologies\IndosCheckerLaravel\Exceptions\DgShippingVerificationException;
 use RenderbitTechnologies\IndosCheckerLaravel\Exceptions\InvalidIndosException;
-use RenderbitTechnologies\IndosCheckerLaravel\Services\DgShippingVerifier;
+use RenderbitTechnologies\IndosCheckerLaravel\Services\IndosApiService;
 
 class IndosCheckerLaravel
 {
     protected string $format;
-    protected ?string $dgShippingUrl;
+    protected ?string $esamudraUrl;
     protected int $timeout;
     protected bool $cacheVerification;
     protected int $cacheTtl;
-    protected ?DgShippingVerifier $verifier = null;
+    protected ?IndosApiService $verifier = null;
 
     public function __construct()
     {
-        $this->format = config('indos-checker-laravel.format', '/^\d{2}[A-Z]{2}\d{4}$/i');
-        $this->dgShippingUrl = config('indos-checker-laravel.dg_shipping_url');
-        $this->timeout = config('indos-checker-laravel.timeout', 30);
+        $this->format            = config('indos-checker-laravel.format', '/^\d{2}[A-Z]{2}\d{4}$/i');
+        $this->esamudraUrl       = config('indos-checker-laravel.esamudra_url');
+        $this->timeout           = config('indos-checker-laravel.timeout', 30);
         $this->cacheVerification = config('indos-checker-laravel.cache_verification', true);
-        $this->cacheTtl = config('indos-checker-laravel.cache_ttl', 1440);
+        $this->cacheTtl          = config('indos-checker-laravel.cache_ttl', 1440);
     }
 
     /**
@@ -72,14 +74,15 @@ class IndosCheckerLaravel
     }
 
     /**
-     * Verify an INDOS number against the DG Shipping portal.
+     * Verify an INDOS number and date of birth against the DGS eSamudra server.
      *
-     * @return array{valid: bool, indos_number: string, verified_at: string, raw_response?: mixed}
+     * @param  string  $dob  Date of birth in DD/MM/YYYY format
+     * @return array{valid: bool, indos_number: string, verified_at: string, seafarer: array}
      *
-     * @throws DgShippingVerificationException
      * @throws InvalidIndosException
+     * @throws DgShippingVerificationException
      */
-    public function verify(string $indosNumber): array
+    public function verify(string $indosNumber, string $dob): array
     {
         $indosNumber = $this->format($indosNumber);
 
@@ -88,10 +91,10 @@ class IndosCheckerLaravel
             throw new InvalidIndosException($indosNumber, $errors);
         }
 
-        if ($this->dgShippingUrl === null) {
+        if ($this->esamudraUrl === null) {
             throw new DgShippingVerificationException(
                 $indosNumber,
-                'DG Shipping verification is not configured. Set dg_shipping_url in config.'
+                'eSamudra verification is not configured. Set esamudra_url in config.'
             );
         }
 
@@ -104,26 +107,24 @@ class IndosCheckerLaravel
             }
         }
 
-        $verifier = $this->getVerifier();
-        $result = $verifier->verify($indosNumber);
+        $result = $this->getVerifier()->verify($indosNumber, $dob);
 
-        if ($this->cacheVerification) {
-            Cache::put($cacheKey, array_diff_key($result, ['raw_response' => null]), $this->cacheTtl * 60);
+        if ($this->cacheVerification && $result['valid']) {
+            Cache::put($cacheKey, $result, $this->cacheTtl * 60);
         }
 
         return $result;
     }
 
     /**
-     * Get the DG Shipping verifier instance.
+     * Get the eSamudra verifier instance.
      */
-    public function getVerifier(): DgShippingVerifier
+    public function getVerifier(): IndosApiService
     {
         if ($this->verifier === null) {
-            $this->verifier = new DgShippingVerifier(
-                $this->dgShippingUrl,
-                $this->timeout
-            );
+            $client         = new Client(['timeout' => $this->timeout]);
+            $checker        = new IndosChecker($client, $this->esamudraUrl);
+            $this->verifier = new IndosApiService($checker);
         }
 
         return $this->verifier;
