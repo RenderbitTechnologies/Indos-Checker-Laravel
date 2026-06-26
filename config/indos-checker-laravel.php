@@ -8,7 +8,7 @@ return [
     | INDOS Number Format
     |--------------------------------------------------------------------------
     |
-    | The regex pattern used to validate INDOS numbers.
+    | Regex pattern for offline format validation.
     | DGMA format: 2-digit year + 2-letter port code + 4-digit serial (e.g., 18NM1234).
     |
     */
@@ -17,23 +17,25 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | DG Shipping Verification URL
+    | DGS eSamudra URL
     |--------------------------------------------------------------------------
     |
-    | The URL of the DG Shipping INDoS/COP Checker portal used for
-    | online verification of INDOS numbers. Set to null to disable
-    | online verification entirely.
+    | Endpoint for the DGS eSamudra AJAX servlet. Set to null to disable
+    | online verification. The default value is the public DGS server.
     |
     */
 
-    'dg_shipping_url' => 'https://www.dgshipping.gov.in/Content/PageUrl.aspx?page_name=INDOS',
+    'esamudra_url' => env(
+        'INDOS_ESAMUDRA_URL',
+        'http://220.156.189.33/esamudraUI/checkerajaxservlet'
+    ),
 
     /*
     |--------------------------------------------------------------------------
     | HTTP Timeout
     |--------------------------------------------------------------------------
     |
-    | Timeout in seconds for HTTP requests to the DG Shipping portal.
+    | Timeout in seconds for HTTP requests to the eSamudra server.
     |
     */
 
@@ -44,8 +46,8 @@ return [
     | Cache Verification Results
     |--------------------------------------------------------------------------
     |
-    | Whether to cache DG Shipping verification results to avoid
-    | repeated HTTP requests. Uses Laravel's Cache facade.
+    | Cache successful verification results to avoid repeated HTTP requests.
+    | Uses Laravel's Cache facade. Only valid (true) results are cached.
     |
     */
 
@@ -56,19 +58,18 @@ return [
     | Cache TTL (Minutes)
     |--------------------------------------------------------------------------
     |
-    | How long (in minutes) to cache DG Shipping verification results.
-    | Only applicable when cache_verification is true.
+    | How long to cache a successful verification result. Default: 24 hours.
     |
     */
 
-    'cache_ttl' => 60 * 24, // 24 hours
+    'cache_ttl' => 60 * 24,
 
     /*
     |--------------------------------------------------------------------------
     | Table Name
     |--------------------------------------------------------------------------
     |
-    | The name of the database table to store INDOS verification records.
+    | Database table for optional INDOS record persistence.
     |
     */
 
