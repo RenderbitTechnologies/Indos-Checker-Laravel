@@ -23,12 +23,14 @@
         "illuminate/database": "^10.0|^11.0",
         "illuminate/http": "^10.0|^11.0",
         "illuminate/support": "^10.0|^11.0",
+        "renderbit-technologies/indos-checker-api": "^2.1",
         "spatie/laravel-package-tools": "^1.9.2"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.8",
-        "nunomaduro/collision": "^6.0|^7.0|^8.0",
         "larastan/larastan": "^2.0",
+        "mockery/mockery": "^1.6",
+        "nunomaduro/collision": "^6.0|^7.0|^8.0",
         "orchestra/testbench": "^8.0|^9.2",
         "pestphp/pest": "^2.0",
         "pestphp/pest-plugin-laravel": "^2.0",
