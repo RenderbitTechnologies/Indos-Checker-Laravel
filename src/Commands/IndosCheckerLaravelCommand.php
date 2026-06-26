@@ -8,8 +8,9 @@ use RenderbitTechnologies\IndosCheckerLaravel\IndosCheckerLaravel;
 class IndosCheckerLaravelCommand extends Command
 {
     public $signature = 'indos:check
-        {indosNumber : The INDOS number to validate (e.g., IND1234567)}
-        {--verify : Also verify the number against the DG Shipping portal}';
+        {indosNumber : The INDOS number to validate (e.g., 18NM1234)}
+        {--verify : Also verify the number against the DGS eSamudra server}
+        {--dob= : Date of birth in DD/MM/YYYY format — required when using --verify}';
 
     public $description = 'Validate an INDOS number issued by the Directorate General of Shipping, Mumbai';
 
@@ -40,18 +41,32 @@ class IndosCheckerLaravelCommand extends Command
         $this->line('  <info>✓ Format Validation:</info> <fg=green>PASSED</fg=green>');
         $this->line("    Normalized: <info>{$checker->format($indosNumber)}</info>");
 
-        // DG Shipping verification (optional)
+        // eSamudra verification (optional)
         if ($this->option('verify')) {
+            $dob = $this->option('dob');
+
+            if (! $dob) {
+                $this->error('  --dob is required when using --verify (format: DD/MM/YYYY)');
+                $this->newLine();
+
+                return self::FAILURE;
+            }
+
             $this->newLine();
-            $this->line('  <info>Verifying against DG Shipping portal...</info>');
+            $this->line('  <info>Verifying against DGS eSamudra server...</info>');
 
             try {
-                $result = $checker->verify($indosNumber);
+                $result = $checker->verify($indosNumber, $dob);
 
                 if ($result['valid']) {
-                    $this->line('  <info>✓ DG Shipping Verification:</info> <fg=green>VALID</fg=green>');
+                    $this->line('  <info>✓ eSamudra Verification:</info> <fg=green>VALID</fg=green>');
+                    if (! empty($result['seafarer'])) {
+                        foreach ($result['seafarer'] as $label => $value) {
+                            $this->line("    <info>{$label}:</info> {$value}");
+                        }
+                    }
                 } else {
-                    $this->line('  <info>✗ DG Shipping Verification:</info> <fg=red>INVALID</fg=red>');
+                    $this->line('  <info>✗ eSamudra Verification:</info> <fg=red>INVALID</fg=red>');
                 }
 
                 $this->line("    Verified at: <info>{$result['verified_at']}</info>");
@@ -63,7 +78,7 @@ class IndosCheckerLaravelCommand extends Command
             }
         } else {
             $this->newLine();
-            $this->line('  <comment>Tip:</comment> Use <info>--verify</info> to also check against the DG Shipping portal.');
+            $this->line('  <comment>Tip:</comment> Use <info>--verify --dob=DD/MM/YYYY</info> to check against the DGS eSamudra server.');
         }
 
         $this->newLine();
