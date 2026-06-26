@@ -1,0 +1,57 @@
+name: Documentation
+description: Report incorrect, missing, or unclear documentation
+labels: ["documentation"]
+body:
+
+  - type: markdown
+    attributes:
+      value: |
+        Use this template to report issues with the README, code comments, PHPDoc blocks, or example snippets.
+
+  - type: dropdown
+    id: doc_type
+    attributes:
+      label: Type of documentation issue
+      options:
+        - "Incorrect information"
+        - "Missing documentation"
+        - "Unclear or confusing wording"
+        - "Outdated example"
+        - "Broken link"
+        - "Other"
+    validations:
+      required: true
+
+  - type: input
+    id: location
+    attributes:
+      label: Location
+      description: Where is the issue? (file path, URL, or section heading)
+      placeholder: "e.g. README.md → Installation section, or docs/verification.md"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What's wrong?
+      description: Describe the issue and what the correct information should be.
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested fix
+      description: If you know the correct information, please share it here.
+      render: markdown
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I have searched existing issues and this is not a duplicate
+          required: true
