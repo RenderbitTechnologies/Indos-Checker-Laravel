@@ -15,7 +15,6 @@
 use RenderbitTechnologies\IndosCheckerLaravel\Exceptions\DgShippingVerificationException;
 use RenderbitTechnologies\IndosCheckerLaravel\Exceptions\InvalidIndosException;
 use RenderbitTechnologies\IndosCheckerLaravel\IndosCheckerLaravel;
-use RenderbitTechnologies\IndosCheckerLaravel\Services\IndosApiService;
 
 $onlineEnabled = (bool) getenv('INDOS_ONLINE_TEST');
 

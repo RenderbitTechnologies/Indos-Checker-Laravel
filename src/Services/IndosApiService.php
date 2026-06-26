@@ -8,7 +8,9 @@ use RenderbitTechnologies\IndosCheckerLaravel\Exceptions\DgShippingVerificationE
 
 class IndosApiService
 {
-    public function __construct(private IndosChecker $checker) {}
+    public function __construct(private IndosChecker $checker)
+    {
+    }
 
     /**
      * Verify an INDOS number via the DGS eSamudra server.
@@ -24,13 +26,13 @@ class IndosApiService
     {
         try {
             $seafarer = $this->checker->getData($indosNumber, $dob);
-            $isValid  = isset($seafarer['INDoS No.']);
+            $isValid = isset($seafarer['INDoS No.']);
 
             return [
-                'valid'        => $isValid,
+                'valid' => $isValid,
                 'indos_number' => $indosNumber,
-                'verified_at'  => now()->toIso8601String(),
-                'seafarer'     => $isValid ? $seafarer : [],
+                'verified_at' => now()->toIso8601String(),
+                'seafarer' => $isValid ? $seafarer : [],
             ];
         } catch (IndosCheckerException $e) {
             throw new DgShippingVerificationException(

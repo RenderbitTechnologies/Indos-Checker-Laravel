@@ -20,11 +20,11 @@ class IndosCheckerLaravel
 
     public function __construct()
     {
-        $this->format            = config('indos-checker-laravel.format', '/^\d{2}[A-Z]{2}\d{4}$/i');
-        $this->esamudraUrl       = config('indos-checker-laravel.esamudra_url');
-        $this->timeout           = config('indos-checker-laravel.timeout', 30);
+        $this->format = config('indos-checker-laravel.format', '/^\d{2}[A-Z]{2}\d{4}$/i');
+        $this->esamudraUrl = config('indos-checker-laravel.esamudra_url');
+        $this->timeout = config('indos-checker-laravel.timeout', 30);
         $this->cacheVerification = config('indos-checker-laravel.cache_verification', true);
-        $this->cacheTtl          = config('indos-checker-laravel.cache_ttl', 1440);
+        $this->cacheTtl = config('indos-checker-laravel.cache_ttl', 1440);
     }
 
     /**
@@ -122,8 +122,8 @@ class IndosCheckerLaravel
     public function getVerifier(): IndosApiService
     {
         if ($this->verifier === null) {
-            $client         = new Client(['timeout' => $this->timeout]);
-            $checker        = new IndosChecker($client, $this->esamudraUrl);
+            $client = new Client(['timeout' => $this->timeout]);
+            $checker = new IndosChecker($client, $this->esamudraUrl);
             $this->verifier = new IndosApiService($checker);
         }
 

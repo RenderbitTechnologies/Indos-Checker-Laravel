@@ -17,16 +17,16 @@ it('returns valid result with seafarer data when INDOS and DOB match', function 
     $checker->shouldReceive('getData')
         ->once()->with('18NM1234', '01/01/1990')
         ->andReturn([
-            'Name'            => 'JOHN DOE',
-            'Date of Birth'   => '01-JAN-1990',
-            'INDoS No.'       => '18NM1234',
-            'Passport No.'    => 'M1234567',
-            'CDC No.'         => 'MUM 001',
+            'Name' => 'JOHN DOE',
+            'Date of Birth' => '01-JAN-1990',
+            'INDoS No.' => '18NM1234',
+            'Passport No.' => 'M1234567',
+            'CDC No.' => 'MUM 001',
             'CDC Issue Place' => 'Mumbai',
         ]);
 
     $service = new IndosApiService($checker);
-    $result  = $service->verify('18NM1234', '01/01/1990');
+    $result = $service->verify('18NM1234', '01/01/1990');
 
     expect($result)->toBeArray()
         ->and($result['valid'])->toBeTrue()
@@ -44,7 +44,7 @@ it('returns invalid result with empty seafarer data when DOB does not match', fu
         ->andReturn([]);
 
     $service = new IndosApiService($checker);
-    $result  = $service->verify('18NM1234', '99/99/9999');
+    $result = $service->verify('18NM1234', '99/99/9999');
 
     expect($result['valid'])->toBeFalse()
         ->and($result['seafarer'])->toBeArray()->toBeEmpty();
@@ -66,7 +66,7 @@ it('result always contains indos_number, valid, verified_at, and seafarer keys',
     $checker->shouldReceive('getData')->andReturn([]);
 
     $service = new IndosApiService($checker);
-    $result  = $service->verify('18NM1234', '01/01/1990');
+    $result = $service->verify('18NM1234', '01/01/1990');
 
     expect($result)->toHaveKeys(['valid', 'indos_number', 'verified_at', 'seafarer']);
 });
@@ -78,7 +78,7 @@ function makeChecker(array $seafarerData): IndosCheckerLaravel
     $mockIndosChecker = Mockery::mock(IndosChecker::class);
     $mockIndosChecker->shouldReceive('getData')->andReturn($seafarerData);
 
-    $checker    = new IndosCheckerLaravel();
+    $checker = new IndosCheckerLaravel();
     $reflection = new ReflectionProperty($checker, 'verifier');
     $reflection->setAccessible(true);
     $reflection->setValue($checker, new IndosApiService($mockIndosChecker));
@@ -105,17 +105,17 @@ it('IndosCheckerLaravel::verify() does not cache failed results', function () {
 
 it('IndosCheckerLaravel::verify() returns cached result without hitting eSamudra', function () {
     $cached = [
-        'valid'        => true,
+        'valid' => true,
         'indos_number' => '18NM1234',
-        'verified_at'  => '2024-01-01T00:00:00+00:00',
-        'seafarer'     => ['Name' => 'CACHED USER'],
+        'verified_at' => '2024-01-01T00:00:00+00:00',
+        'seafarer' => ['Name' => 'CACHED USER'],
     ];
     Cache::put('indos_verification_18NM1234', $cached, 60);
 
     $mockIndosChecker = Mockery::mock(IndosChecker::class);
     $mockIndosChecker->shouldReceive('getData')->never();
 
-    $checker    = new IndosCheckerLaravel();
+    $checker = new IndosCheckerLaravel();
     $reflection = new ReflectionProperty($checker, 'verifier');
     $reflection->setAccessible(true);
     $reflection->setValue($checker, new IndosApiService($mockIndosChecker));
@@ -137,7 +137,7 @@ it('IndosCheckerLaravel::verify() throws InvalidIndosException for bad format', 
 
 it('IndosCheckerLaravel::verify() normalises INDOS number to uppercase before lookup', function () {
     $checker = makeChecker(['INDoS No.' => '18NM1234', 'Name' => 'JANE DOE']);
-    $result  = $checker->verify('18nm1234', '01/01/1990');
+    $result = $checker->verify('18nm1234', '01/01/1990');
 
     expect($result['indos_number'])->toBe('18NM1234');
 });
