@@ -1,6 +1,9 @@
 # INDOS Checker for Laravel
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/renderbit-technologies/indos-checker-laravel.svg?style=flat-square)](https://packagist.org/packages/renderbit-technologies/indos-checker-laravel)
+[![License](https://img.shields.io/packagist/l/renderbit-technologies/indos-checker-laravel?style=flat-square)](https://packagist.org/packages/renderbit-technologies/indos-checker-laravel)
+[![PHP Version Require](https://img.shields.io/packagist/php-v/renderbit-technologies/indos-checker-laravel?style=flat-square)](https://packagist.org/packages/renderbit-technologies/indos-checker-laravel)
+[![Laravel Version](https://img.shields.io/badge/Laravel-10.x%20%7C%2011.x-FF2D20?style=flat-square&logo=laravel&logoColor=white)](https://laravel.com)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/RenderbitTechnologies/indos-checker-laravel/run-tests.yml?branch=main&label=tests)](https://github.com/RenderbitTechnologies/indos-checker-laravel/actions?query=workflow%3Arun-tests+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/renderbit-technologies/indos-checker-laravel.svg?style=flat-square)](https://packagist.org/packages/renderbit-technologies/indos-checker-laravel)
 
