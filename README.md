@@ -12,7 +12,7 @@ A Laravel package for validating **INDoS (Indian National Database of Seafarers)
 The package provides:
 
 - **Format validation** — offline regex check against the official `YYCCSSSS` pattern (e.g. `18NM1234`)
-- **Remote verification** — optional live lookup against the DG Shipping portal
+- **Remote verification** — optional live lookup against the DGS eSamudra server, returning a full structured seafarer profile
 - **Laravel validation rule** — drop-in `IndosRule` for use in `Validator`/`FormRequest`
 - **Result caching** — configurable cache layer to avoid repeated HTTP requests
 
@@ -52,17 +52,22 @@ return [
     // DGMA format: 2-digit year + 2-letter port code + 4-digit serial.
     'format' => '/^\d{2}[A-Z]{2}\d{4}$/i',
 
-    // DG Shipping INDoS/COP Checker portal URL.
-    // Set to null to disable remote verification entirely.
-    'dg_shipping_url' => 'https://www.dgshipping.gov.in/Content/PageUrl.aspx?page_name=INDOS',
+    // DGS eSamudra AJAX endpoint used for online verification.
+    // Override via the INDOS_ESAMUDRA_URL environment variable,
+    // or set to null to disable remote verification entirely.
+    'esamudra_url' => env(
+        'INDOS_ESAMUDRA_URL',
+        'http://220.156.189.33/esamudraUI/checkerajaxservlet'
+    ),
 
-    // HTTP timeout in seconds for requests to the DG Shipping portal.
+    // HTTP timeout in seconds for requests to the eSamudra server.
     'timeout' => 30,
 
-    // Cache verification results to avoid repeated HTTP requests.
+    // Cache successful verification results to avoid repeated HTTP requests.
+    // Only valid (true) results are cached; failed lookups are never stored.
     'cache_verification' => true,
 
-    // How long (in minutes) to cache results. Default: 24 hours.
+    // How long (in minutes) to cache a successful result. Default: 24 hours.
     'cache_ttl' => 60 * 24,
 
     // Database table name for storing verification records.
@@ -70,7 +75,7 @@ return [
 ];
 ```
 
-> **Note:** The DG Shipping portal is hosted on Indian government infrastructure and is only reachable from Indian IP ranges. Remote verification requires an Indian network or a Mumbai-region cloud instance.
+> **Note:** The DGS eSamudra server (`220.156.189.33`) runs on HTTP port 80 only — TLS is not yet enabled on the server side. Remote verification works best from Indian networks; test from an Indian network or a Mumbai-region cloud instance.
 
 ## Usage
 
@@ -120,9 +125,9 @@ The rule reports a human-readable error message when validation fails:
 The INDoS number format is invalid. Expected format: YYCCSSSS (e.g., 18NM1234).
 ```
 
-### Remote verification against DG Shipping
+### Remote verification via DGS eSamudra
 
-`verify()` first validates the format, then performs a live HTTP lookup against the DG Shipping portal. Results are cached for `cache_ttl` minutes.
+`verify()` first validates the INDOS number format offline, then performs a live lookup against the DGS eSamudra server. A date of birth is required — it is the credential the eSamudra server uses to authenticate the query. Successful results are cached for `cache_ttl` minutes.
 
 ```php
 use RenderbitTechnologies\IndosCheckerLaravel\IndosCheckerLaravel;
@@ -132,57 +137,83 @@ use RenderbitTechnologies\IndosCheckerLaravel\Exceptions\InvalidIndosException;
 $checker = new IndosCheckerLaravel();
 
 try {
-    $result = $checker->verify('18NM1234');
+    $result = $checker->verify('18NM1234', '14/08/1963');  // DOB in DD/MM/YYYY
 
-    // $result shape:
+    // $result shape when valid:
     // [
     //   'valid'        => true,
     //   'indos_number' => '18NM1234',
-    //   'verified_at'  => '2024-06-25T10:30:00+00:00',  // ISO 8601
-    //   'raw_response' => '<html>...</html>',            // portal HTML (not cached)
+    //   'verified_at'  => '2024-06-26T10:30:00+05:30',  // ISO 8601
+    //   'seafarer'     => [
+    //     'Name'             => 'YADAV SANJEEV',
+    //     'Date of Birth'    => '14-AUG-1963',
+    //     'INDoS No.'        => '05LL0262',
+    //     'Passport No.'     => 'M2069200',
+    //     'Passport Issue Date' => '15-SEP-2014',
+    //     'Passport Valid To'   => '14-SEP-2024',
+    //     'CDC No.'          => 'MUM 133201',
+    //     'CDC Issue Date'   => '22-MAY-2015',
+    //     'CDC Valid To'     => '21-MAY-2025',
+    //     'CDC Issue Place'  => 'Mumbai',
+    //   ],
+    // ]
+    //
+    // $result shape when invalid (DOB mismatch or number not found):
+    // [
+    //   'valid'        => false,
+    //   'indos_number' => '18NM1234',
+    //   'verified_at'  => '2024-06-26T10:30:00+05:30',
+    //   'seafarer'     => [],
     // ]
 
     if ($result['valid']) {
-        // Seafarer record found on DG Shipping portal
+        $name = $result['seafarer']['Name'];
+        $cdc  = $result['seafarer']['CDC No.'];
     }
 
 } catch (InvalidIndosException $e) {
-    // Format is invalid — portal was never contacted
+    // Format is invalid — eSamudra was never contacted
     $e->getIndosNumber();  // the submitted value
     $e->getErrors();       // array of validation error messages
 
 } catch (DgShippingVerificationException $e) {
-    // Portal unreachable, returned an HTTP error, or is not configured
+    // eSamudra unreachable, returned an HTTP error, or is not configured
     $e->getIndosNumber();  // the INDOS number that was being verified
     $e->getMessage();      // human-readable reason
 }
 ```
 
-#### Response parsing
-
-The verifier uses a **fail-closed** strategy when parsing the portal HTML:
-
-| Response contains | Result |
-|-------------------|--------|
-| Known error text (`no record found`, `invalid indos`, …) | `valid: false` |
-| Known success fields (`seafarer name`, `date of birth`, `indos no`, `certificate`) | `valid: true` |
-| Anything else (ambiguous or unrecognised page) | `valid: false` |
-
-The INDOS number appearing anywhere in the response body is **not** treated as a success signal — an error page that echoes back the queried number would otherwise produce a false positive.
+> **DOB format:** Pass the date of birth exactly as `DD/MM/YYYY` (e.g. `14/08/1963`). An `\InvalidArgumentException` is thrown if the format does not match.
 
 #### Caching
 
-Cached entries contain `valid`, `indos_number`, and `verified_at` only. The `raw_response` HTML is intentionally excluded from the cache to avoid persisting large payloads across the 24-hour TTL.
+Only successful (`valid: true`) results are cached. A failed lookup — wrong DOB, number not found — is never stored, so a subsequent call with the correct DOB will always reach the server. Cached entries contain the full `seafarer` array alongside `valid`, `indos_number`, and `verified_at`.
 
 #### Disable remote verification
 
-Set `dg_shipping_url` to `null` in the config (or override at runtime):
+Set `esamudra_url` to `null` in the config or via the environment variable:
 
 ```php
-config(['indos-checker-laravel.dg_shipping_url' => null]);
+// config/indos-checker-laravel.php
+'esamudra_url' => null,
+
+// or at runtime:
+config(['indos-checker-laravel.esamudra_url' => null]);
 ```
 
-Calling `verify()` with a null URL throws `DgShippingVerificationException` immediately with the message `"DG Shipping verification is not configured"`.
+Calling `verify()` when the URL is `null` throws `DgShippingVerificationException` immediately with the message `"eSamudra verification is not configured"`.
+
+### Artisan command
+
+```bash
+# Format validation only
+php artisan indos:check 18NM1234
+
+# Format validation + live eSamudra verification
+php artisan indos:check 18NM1234 --verify --dob=14/08/1963
+```
+
+A successful verification prints the full seafarer profile returned by the eSamudra server.
 
 ## INDOS Number Format
 
@@ -200,9 +231,9 @@ Full example: **`18NM1234`** — registered in 2018 at New Mangalore port, seria
 composer test
 ```
 
-### Live portal integration tests
+### Live eSamudra integration tests
 
-The DG Shipping portal is geo-restricted to Indian IP ranges. Integration tests in `tests/Integration/` are skipped by default and must be opted into explicitly:
+Integration tests in `tests/Integration/` make real HTTP requests to the DGS eSamudra server. They are skipped by default and must be opted into explicitly:
 
 ```bash
 INDOS_ONLINE_TEST=1 vendor/bin/pest --group=online
